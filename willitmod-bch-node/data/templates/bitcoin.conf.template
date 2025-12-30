@@ -1,0 +1,26 @@
+server=1
+txindex=0
+
+# Pruning: enabled by default (recommended for ARM). Set prune=0 for archival.
+prune=550
+
+# Network selection (uncomment one, then restart):
+# testnet=1
+# regtest=1
+
+# Ports
+port=${BCH_P2P_PORT}
+rpcport=${BCH_RPC_PORT}
+
+# RPC
+rpcuser=${RPC_USER}
+rpcpassword=${RPC_PASSWORD}
+rpcbind=0.0.0.0
+rpcallowip=127.0.0.1/32
+rpcallowip=${APPS_SUBNET}
+rpcallowip=10.0.0.0/8
+rpcallowip=172.16.0.0/12
+rpcallowip=192.168.0.0/16
+
+# ZMQ (for solo mining / notifications)
+zmqpubhashblock=tcp://0.0.0.0:${BCH_ZMQ_HASHBLOCK_PORT}
