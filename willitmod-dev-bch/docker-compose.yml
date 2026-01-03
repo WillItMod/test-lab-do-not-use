@@ -6,6 +6,8 @@ services:
       # Use a unique DNS alias to avoid collisions on Umbrel's shared Docker network.
       APP_HOST: axebch-app
       APP_PORT: 3000
+    networks:
+      - umbrel_main_network
 
   init:
     image: alpine:3.22.1
@@ -116,6 +118,9 @@ services:
       default:
         aliases:
           - axebch-app
+      umbrel_main_network:
+        aliases:
+          - axebch-app
     volumes:
       - ${APP_DATA_DIR}/data:/data
     environment:
@@ -128,3 +133,8 @@ services:
       BCHN_IMAGE: "mainnet/bitcoin-cash-node:v28.0.1"
       CKPOOL_IMAGE: "ghcr.io/getumbrel/docker-ckpool-solo:590fb2a"
       STATIC_DIR: "/app/static"
+
+networks:
+  umbrel_main_network:
+    external: true
+    name: umbrel_main_network

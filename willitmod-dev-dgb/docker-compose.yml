@@ -9,6 +9,8 @@ services:
       # Verify Umbrel auth tokens using the same secret the auth-server uses.
       # exports.sh ensures JWT_SECRET is populated even in legacy-compat flows.
       JWT_SECRET: "${JWT_SECRET}"
+    networks:
+      - umbrel_main_network
 
   init:
     image: alpine:3.22.1
@@ -431,6 +433,9 @@ services:
       default:
         aliases:
           - axedgb-app
+      umbrel_main_network:
+        aliases:
+          - axedgb-app
     volumes:
       - ${APP_DATA_DIR}/data:/data
     environment:
@@ -449,3 +454,8 @@ services:
       MININGCORE_IMAGE: "ghcr.io/willitmod/axedgb-miningcore:axedgb-0.8.10-r22"
       POSTGRES_IMAGE: "postgres:16-alpine"
       STATIC_DIR: "/app/static"
+
+networks:
+  umbrel_main_network:
+    external: true
+    name: umbrel_main_network
