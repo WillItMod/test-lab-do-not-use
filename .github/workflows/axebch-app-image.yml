@@ -1,12 +1,12 @@
-name: Build AxeDGB app image (multi-arch)
+name: Build AxeBCH app image (multi-arch)
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - "willitmod-dev-dgb/images/axedgb-app/**"
-      - ".github/workflows/axedgb-app-image.yml"
+      - "willitmod-dev-bch/images/axebch-app/**"
+      - ".github/workflows/axebch-app-image.yml"
 
 permissions:
   contents: read
@@ -35,7 +35,7 @@ jobs:
           import re
           from pathlib import Path
           from os import environ
-          text = Path("willitmod-dev-dgb/images/axedgb-app/app.py").read_text(encoding="utf-8", errors="replace")
+          text = Path("willitmod-dev-bch/images/axebch-app/app.py").read_text(encoding="utf-8", errors="replace")
           m = re.search(r'^\s*APP_VERSION\s*=\s*"([^"]+)"\s*$', text, flags=re.M)
           if not m:
               raise SystemExit("APP_VERSION not found in app.py")
@@ -50,9 +50,10 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./willitmod-dev-dgb/images/axedgb-app
+          context: ./willitmod-dev-bch/images/axebch-app
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/willitmod/axedgb-app-umbrel-test:${{ steps.tag.outputs.tag }}
+            ghcr.io/willitmod/axebch-app-umbrel-test:${{ steps.tag.outputs.tag }}
           provenance: false
+
