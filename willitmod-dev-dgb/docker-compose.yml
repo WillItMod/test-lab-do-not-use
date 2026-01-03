@@ -196,12 +196,52 @@ services:
                  ' /data/pool/config/miningcore.json > "$$tmp2" && mv "$$tmp2" /data/pool/config/miningcore.json
             fi
 
+            # Apply user-saved payout address + varDiff settings (saved by the UI into a state file).
+            # This ensures the payout address applies to BOTH pools (SHA256 + Scrypt) and survives upgrades.
+            settings="/data/ui/state/pool_settings.json"
+            if [ -f "$$settings" ] && jq -e '.' >/dev/null 2>&1 < "$$settings"; then
+              desired_addr="$(jq -r '.payoutAddress // empty' "$$settings" | tr -d ' \t\r\n')"
+              desired_mindiff="$(jq -r '.mindiff // empty' "$$settings" | tr -d ' \t\r\n')"
+              desired_startdiff="$(jq -r '.startdiff // empty' "$$settings" | tr -d ' \t\r\n')"
+              desired_maxdiff="$(jq -r '.maxdiff // empty' "$$settings" | tr -d ' \t\r\n')"
+
+              if ! echo "$$desired_mindiff" | grep -qE '^[0-9]+$$'; then desired_mindiff=""; fi
+              if ! echo "$$desired_startdiff" | grep -qE '^[0-9]+$$'; then desired_startdiff=""; fi
+              if ! echo "$$desired_maxdiff" | grep -qE '^[0-9]+$$'; then desired_maxdiff=""; fi
+
+              # Only accept legacy/base58 payout addresses here. Bech32 (dgb1...) will be rejected by Miningcore.
+              if echo "$$desired_addr" | grep -qE '^[DS][1-9A-HJ-NP-Za-km-z]{25,60}$$'; then
+                echo "[axedgb] Applying payout address + varDiff settings from $$settings"
+                tmp_apply="/data/pool/config/miningcore.json.tmp_apply"
+                jq --arg addr "$$desired_addr" \
+                   --argjson mindiff "$${desired_mindiff:-0}" \
+                   --argjson startdiff "$${desired_startdiff:-0}" \
+                   --argjson maxdiff "$${desired_maxdiff:-0}" \
+                   '
+                   def apply_port(p):
+                     p
+                     | .listenAddress = "0.0.0.0"
+                     | (if ($startdiff > 0) then .difficulty = $startdiff else . end)
+                     | (if ($mindiff > 0) then .varDiff.minDiff = $mindiff else . end)
+                     | (if ($maxdiff > 0) then .varDiff.maxDiff = $maxdiff else .varDiff.maxDiff = null end);
+
+                   (.pools |= (if type=="array" then map(
+                     if (.id=="dgb-sha256-1" or .id=="dgb-scrypt-1") then
+                       (.enabled = true)
+                       | (.address = $addr)
+                       | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then apply_port(.) else . end)) else . end))
+                     else . end
+                   ) else . end))
+                   ' /data/pool/config/miningcore.json > "$$tmp_apply" && mv "$$tmp_apply" /data/pool/config/miningcore.json
+              fi
+            fi
+
             # Safety:
             # - Miningcore crashes on DigiByte bech32 (dgb1...) pool addresses.
             # - We keep a placeholder address to allow Miningcore to start, but Stratum must not be exposed until the user sets a real payout address.
             #
             # If address is bech32, empty, or placeholder: force placeholder and bind Stratum to localhost.
-            if jq -r '.pools[]?.address // ""' /data/pool/config/miningcore.json | grep -qiE '^(dgb1|)$|^D596YFweJQuHY1BbjazZYmAbt8jJPbKehC$'; then
+            if jq -r '.pools[]? | select(.id=="dgb-sha256-1" or .id=="dgb-scrypt-1") | (.address // "")' /data/pool/config/miningcore.json | grep -qiE '^(dgb1|)$|^D596YFweJQuHY1BbjazZYmAbt8jJPbKehC$'; then
               echo "[axedgb] Payout address not configured (or unsupported); binding Stratum to localhost until a real legacy address is set"
               tmp3="/data/pool/config/miningcore.json.tmp3"
               jq '
@@ -382,7 +422,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/config/coins.json:/app/coins.json:ro
 
   app:
-    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.38
+    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.39
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
