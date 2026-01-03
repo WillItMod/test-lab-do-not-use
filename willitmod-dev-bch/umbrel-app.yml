@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-bch
 category: bitcoin
 name: AxeBCH
-version: "0.7.36-beta"
+version: "0.7.37-beta"
 tagline: BCH node + solo pool
 description: >-
   Run a Bitcoin Cash full node (BCHN) and a solo Stratum v1 pool (ckpool) as a single Umbrel app installation.
@@ -45,7 +45,7 @@ description: >-
 
 
   Status:
-    - ALPHA build: expect bugs and breaking changes. Verify payout addresses before mining.
+    - BETA build: expect bugs and breaking changes. Verify payout addresses before mining.
 developer: WillItMod
 website: https://github.com/WillItMod/umbrel-dev-community-store
 repo: https://github.com/WillItMod/umbrel-dev-community-store
