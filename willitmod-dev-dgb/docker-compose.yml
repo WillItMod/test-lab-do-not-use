@@ -7,8 +7,8 @@ services:
       APP_HOST: axedgb-app
       APP_PORT: 3000
       # Verify Umbrel auth tokens using the same secret the auth-server uses.
-      # exports.sh ensures JWT_SECRET is populated even in legacy-compat flows.
-      JWT_SECRET: "${JWT_SECRET}"
+      # Use APP_PASSWORD so manual docker-compose restarts don't accidentally drop JWT_SECRET.
+      JWT_SECRET: "${APP_PASSWORD}"
     networks:
       - umbrel_main_network
 

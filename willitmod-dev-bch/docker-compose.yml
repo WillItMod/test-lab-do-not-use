@@ -6,6 +6,8 @@ services:
       # Use a unique DNS alias to avoid collisions on Umbrel's shared Docker network.
       APP_HOST: axebch-app
       APP_PORT: 3000
+      # Verify Umbrel auth tokens using the same secret the auth-server uses.
+      JWT_SECRET: "${APP_PASSWORD}"
     networks:
       - umbrel_main_network
 
