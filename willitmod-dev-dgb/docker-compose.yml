@@ -221,14 +221,14 @@ services:
                    def apply_port(p):
                      p
                      | .listenAddress = "0.0.0.0"
-                     | (if ($startdiff > 0) then .difficulty = $startdiff else . end)
-                     | (if ($mindiff > 0) then .varDiff.minDiff = $mindiff else . end)
-                     | (if ($maxdiff > 0) then .varDiff.maxDiff = $maxdiff else .varDiff.maxDiff = null end);
+                     | (if ($$startdiff > 0) then .difficulty = $$startdiff else . end)
+                     | (if ($$mindiff > 0) then .varDiff.minDiff = $$mindiff else . end)
+                     | (if ($$maxdiff > 0) then .varDiff.maxDiff = $$maxdiff else .varDiff.maxDiff = null end);
 
                    (.pools |= (if type=="array" then map(
                      if (.id=="dgb-sha256-1" or .id=="dgb-scrypt-1") then
                        (.enabled = true)
-                       | (.address = $addr)
+                       | (.address = $$addr)
                        | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then apply_port(.) else . end)) else . end))
                      else . end
                    ) else . end))
