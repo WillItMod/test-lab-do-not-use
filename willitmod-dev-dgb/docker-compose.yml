@@ -7,8 +7,9 @@ services:
       APP_HOST: axedgb-app
       APP_PORT: 3000
       # Verify Umbrel auth tokens using the same secret the auth-server uses.
-      # Umbrel provides UMBREL_AUTH_SECRET; app-proxy expects JWT_SECRET.
-      JWT_SECRET: "${UMBREL_AUTH_SECRET}"
+      # Umbrel's auth-server signs tokens with JWT_SECRET.
+      # When starting/restarting via Umbrel, exports.sh should populate JWT_SECRET.
+      JWT_SECRET: "${JWT_SECRET}"
     networks:
       - umbrel_main_network
 
