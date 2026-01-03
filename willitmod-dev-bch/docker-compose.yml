@@ -7,7 +7,7 @@ services:
       APP_HOST: axebch-app
       APP_PORT: 3000
       # Verify Umbrel auth tokens using the same secret the auth-server uses.
-      JWT_SECRET: "${APP_PASSWORD}"
+      JWT_SECRET: "${UMBREL_AUTH_SECRET}"
     networks:
       - umbrel_main_network
 
