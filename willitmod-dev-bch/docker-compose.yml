@@ -46,6 +46,15 @@ services:
         if [ ! -f /data/node/bitcoin.conf ]; then
           envsubst < /data/templates/bitcoin.conf.template > /data/node/bitcoin.conf
           chown -R 1000:1000 /data/node
+        else
+          # Keep peer limit high on existing installs too.
+          if grep -q '^maxconnections=' /data/node/bitcoin.conf; then
+            sed -i 's/^maxconnections=.*/maxconnections=256/' /data/node/bitcoin.conf
+          else
+            echo '' >> /data/node/bitcoin.conf
+            echo 'maxconnections=256' >> /data/node/bitcoin.conf
+          fi
+          chown 1000:1000 /data/node/bitcoin.conf || true
         fi
 
         if [ ! -f /data/pool/config/ckpool.conf ]; then
