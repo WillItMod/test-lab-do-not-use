@@ -59,13 +59,13 @@
       "ports": {
         "3333": {
           "listenAddress": "127.0.0.1",
-          "difficulty": ${STARTDIFF},
+          "difficulty": ${SHA256_STARTDIFF},
           "varDiff": {
-            "minDiff": ${MINDIFF},
-            "maxDiff": ${MAXDIFF_JSON},
-            "targetTime": 8,
-            "retargetTime": 20,
-            "variancePercent": 25
+            "minDiff": ${SHA256_MINDIFF},
+            "maxDiff": ${SHA256_MAXDIFF_JSON},
+            "targetTime": 7,
+            "retargetTime": 15,
+            "variancePercent": 20
           }
         }
       },
@@ -98,10 +98,10 @@
       "ports": {
         "3334": {
           "listenAddress": "127.0.0.1",
-          "difficulty": ${STARTDIFF},
+          "difficulty": ${SCRYPT_STARTDIFF},
           "varDiff": {
-            "minDiff": ${MINDIFF},
-            "maxDiff": ${MAXDIFF_JSON},
+            "minDiff": ${SCRYPT_MINDIFF},
+            "maxDiff": ${SCRYPT_MAXDIFF_JSON},
             "targetTime": 15,
             "retargetTime": 90,
             "variancePercent": 30

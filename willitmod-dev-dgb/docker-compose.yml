@@ -31,9 +31,17 @@ services:
       DB_USER: "miningcore"
       DB_PASSWORD: "${APP_PASSWORD}"
       DB_NAME: "miningcore"
-      MINDIFF: "0.01"
-      STARTDIFF: "64"
-      MAXDIFF_JSON: "null"
+      # Default VarDiff profile for DGB SHA256: Mixed (protect small miners, still works for larger rigs)
+      # Min / Start / Max
+      SHA256_MINDIFF: "128"
+      SHA256_STARTDIFF: "512"
+      SHA256_MAXDIFF_JSON: "8192"
+
+      # Conservative Scrypt defaults (leave room for low-hashrate miners)
+      # Min / Start / Max
+      SCRYPT_MINDIFF: "1"
+      SCRYPT_STARTDIFF: "1"
+      SCRYPT_MAXDIFF_JSON: "128"
     command:
       - /bin/sh
       - -ec
@@ -164,9 +172,9 @@ services:
                     | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then (.listenAddress="0.0.0.0") else . end)) else . end))
                     | (if .id=="dgb-sha256-1" then
                         (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then
-                          (.varDiff.targetTime = 8)
-                          | (.varDiff.retargetTime = 20)
-                          | (.varDiff.variancePercent = 25)
+                          (.varDiff.targetTime = 7)
+                          | (.varDiff.retargetTime = 15)
+                          | (.varDiff.variancePercent = 20)
                         else . end) else . end))
                       else . end)
                     | (.daemons = ((.daemons // []) | (if type=="array" then map(if type=="object" then (.port=$rpcport) else . end) else . end)))
@@ -180,9 +188,9 @@ services:
               base_addr="$(jq -r '.pools[]? | select(.id=="dgb-sha256-1") | .address // empty' /data/pool/config/miningcore.json | head -n 1)"
               base_enabled="true"
               if [ -z "$$base_addr" ]; then base_enabled="false"; fi
-              base_diff="$(jq -r '.pools[]? | select(.id=="dgb-sha256-1") | (.ports|to_entries[0].value.difficulty // 1024)' /data/pool/config/miningcore.json | head -n 1)"
-              base_mindiff="$(jq -r '.pools[]? | select(.id=="dgb-sha256-1") | (.ports|to_entries[0].value.varDiff.minDiff // 1024)' /data/pool/config/miningcore.json | head -n 1)"
-              base_maxdiff_json="$(jq -c '.pools[]? | select(.id=="dgb-sha256-1") | (.ports|to_entries[0].value.varDiff.maxDiff // null)' /data/pool/config/miningcore.json | head -n 1)"
+              base_diff="$${SCRYPT_STARTDIFF:-1}"
+              base_mindiff="$${SCRYPT_MINDIFF:-1}"
+              base_maxdiff_json="$${SCRYPT_MAXDIFF_JSON:-128}"
               daemons_json="$(jq -c '.pools[]? | select(.id=="dgb-sha256-1") | (.daemons // [])' /data/pool/config/miningcore.json | head -n 1)"
               if [ -z "$$daemons_json" ]; then daemons_json='[]'; fi
               if [ -z "$$base_maxdiff_json" ]; then base_maxdiff_json='null'; fi
@@ -250,7 +258,10 @@ services:
                      | .listenAddress = "0.0.0.0"
                      | (if ($$startdiff > 0) then .difficulty = $$startdiff else . end)
                      | (if ($$mindiff > 0) then .varDiff.minDiff = $$mindiff else . end)
-                     | (if ($$maxdiff > 0) then .varDiff.maxDiff = $$maxdiff else .varDiff.maxDiff = null end);
+                     | (if ($$maxdiff > 0) then .varDiff.maxDiff = $$maxdiff else .varDiff.maxDiff = null end)
+                     | (.varDiff.targetTime = 7)
+                     | (.varDiff.retargetTime = 15)
+                     | (.varDiff.variancePercent = 20);
 
                    (.pools |= (if type=="array" then map(
                      if (.id=="dgb-sha256-1") then
