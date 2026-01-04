@@ -32,6 +32,16 @@ services:
 
         apk add --no-cache envsubst curl >/dev/null
 
+        # Persist Umbrel's JWT secret into ${APP_DATA_DIR}/.env so that SSH restarts
+        # (without Umbrel's exports.sh) don't boot app_proxy with an empty JWT_SECRET.
+        if [ -n "${JWT_SECRET:-}" ]; then
+          tmp="/appdata/.env.tmp"
+          printf "JWT_SECRET=%s\n" "${JWT_SECRET}" > "$tmp"
+          chmod 600 "$tmp" || true
+          chown 1000:1000 "$tmp" || true
+          mv "$tmp" /appdata/.env
+        fi
+
         mkdir -p /data/node /data/pool/config /data/pool/www/pool /data/pool/www/users /data/templates
 
         # Umbrel may create settings.yml as root during update/install; ensure it stays writable.
@@ -118,7 +128,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/www:/www
 
   app:
-    image: ghcr.io/willitmod/axebch-app-umbrel-test:0.7.54-beta
+    image: ghcr.io/willitmod/axebch-app-umbrel-test:0.7.55-beta
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s

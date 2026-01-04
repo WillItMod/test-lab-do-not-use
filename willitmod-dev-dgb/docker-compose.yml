@@ -17,6 +17,7 @@ services:
     image: alpine:3.22.1
     volumes:
       - ${APP_DATA_DIR}/data:/data
+      - ${APP_DATA_DIR}:/appdata
     environment:
       APPS_SUBNET: "${NETWORK_IP}/16"
       RPC_USER: "dgb"
@@ -40,6 +41,16 @@ services:
         set -eu
 
         apk add --no-cache envsubst curl jq postgresql-client >/dev/null
+
+        # Persist Umbrel's JWT secret into ${APP_DATA_DIR}/.env so that SSH restarts
+        # (without Umbrel's exports.sh) don't boot app_proxy with an empty JWT_SECRET.
+        if [ -n "${JWT_SECRET:-}" ]; then
+          tmp="/appdata/.env.tmp"
+          printf "JWT_SECRET=%s\n" "${JWT_SECRET}" > "$tmp"
+          chmod 600 "$tmp" || true
+          chown 1000:1000 "$tmp" || true
+          mv "$tmp" /appdata/.env
+        fi
 
         mkdir -p /data/node /data/pool/config /data/pool/postgres /data/templates
 
@@ -425,7 +436,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/config/coins.json:/app/coins.json:ro
 
   app:
-    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.52
+    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.53
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
@@ -440,7 +451,6 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     environment:
-      JWT_SECRET: "${APP_PASSWORD}"
       DGB_RPC_HOST: "dgbd"
       DGB_RPC_PORT: "14022"
       DGB_RPC_USER: "dgb"
