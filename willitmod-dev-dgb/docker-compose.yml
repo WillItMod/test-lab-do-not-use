@@ -162,6 +162,13 @@ services:
                     (.paymentProcessing = (.paymentProcessing // {"enabled": false}))
                     | (.blockRefreshInterval = ((.blockRefreshInterval // 500) | if . < 2000 then 2000 else . end))
                     | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then (.listenAddress="0.0.0.0") else . end)) else . end))
+                    | (if .id=="dgb-sha256-1" then
+                        (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then
+                          (.varDiff.targetTime = 8)
+                          | (.varDiff.retargetTime = 20)
+                          | (.varDiff.variancePercent = 25)
+                        else . end) else . end))
+                      else . end)
                     | (.daemons = ((.daemons // []) | (if type=="array" then map(if type=="object" then (.port=$rpcport) else . end) else . end)))
                   else . end
                 ) else . end))
@@ -246,10 +253,13 @@ services:
                      | (if ($$maxdiff > 0) then .varDiff.maxDiff = $$maxdiff else .varDiff.maxDiff = null end);
 
                    (.pools |= (if type=="array" then map(
-                     if (.id=="dgb-sha256-1" or .id=="dgb-scrypt-1") then
+                     if (.id=="dgb-sha256-1") then
                        (.enabled = true)
                        | (.address = $$addr)
                        | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then apply_port(.) else . end)) else . end))
+                     elif (.id=="dgb-scrypt-1") then
+                       (.enabled = true)
+                       | (.address = $$addr)
                      else . end
                    ) else . end))
                    ' /data/pool/config/miningcore.json > "$$tmp_apply" && mv "$$tmp_apply" /data/pool/config/miningcore.json
@@ -442,7 +452,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/config/coins.json:/app/coins.json:ro
 
   app:
-    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.67
+    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.68
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s

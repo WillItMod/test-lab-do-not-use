@@ -63,9 +63,9 @@
           "varDiff": {
             "minDiff": ${MINDIFF},
             "maxDiff": ${MAXDIFF_JSON},
-            "targetTime": 15,
-            "retargetTime": 90,
-            "variancePercent": 30
+            "targetTime": 8,
+            "retargetTime": 20,
+            "variancePercent": 25
           }
         }
       },
