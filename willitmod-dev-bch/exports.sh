@@ -2,7 +2,9 @@
 set -euo pipefail
 
 # Umbrel's auth-server signs tokens with JWT_SECRET (not UMBREL_AUTH_SECRET).
-# In legacy-compat flows, JWT_SECRET is not consistently passed through to apps.
+# In some update/restart flows (especially manual SSH updates), JWT_SECRET may not
+# be exported into the app environment, which causes app_proxy to reject logins.
+#
 # If it's missing, read it from the running `auth` container so app_proxy can
 # validate Umbrel JWTs reliably.
 
