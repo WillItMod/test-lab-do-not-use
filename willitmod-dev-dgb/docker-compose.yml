@@ -442,7 +442,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/config/coins.json:/app/coins.json:ro
 
   app:
-    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.60
+    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.61
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
