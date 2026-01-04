@@ -15,6 +15,16 @@ if [ -f /data/.reindex-chainstate ]; then
   extra="-reindex-chainstate"
 fi
 
-echo "[axebch] Exec: bitcoind -datadir=/data -printtoconsole $extra"
-exec bitcoind -datadir=/data -printtoconsole $extra
+dbcache="${BCH_DBCACHE_MB:-}"
+if [ -z "${dbcache}" ]; then
+  mem_kb="$(awk '/MemTotal/ {print $2}' /proc/meminfo 2>/dev/null || echo 0)"
+  mem_mb="$((mem_kb / 1024))"
+  # Conservative: ~1/8 of RAM, clamped.
+  dbcache="$((mem_mb / 8))"
+  if [ "$dbcache" -lt 256 ]; then dbcache=256; fi
+  if [ "$dbcache" -gt 2048 ]; then dbcache=2048; fi
+fi
 
+echo "[axebch] Using dbcache=${dbcache}MB"
+echo "[axebch] Exec: bitcoind -datadir=/data -printtoconsole -dbcache=${dbcache} $extra"
+exec bitcoind -datadir=/data -printtoconsole -dbcache="${dbcache}" $extra
