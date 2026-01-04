@@ -35,11 +35,17 @@ services:
         # Persist Umbrel's JWT secret into ${APP_DATA_DIR}/.env so that SSH restarts
         # (without Umbrel's exports.sh) don't boot app_proxy with an empty JWT_SECRET.
         if [ -n "${JWT_SECRET:-}" ]; then
+          envfile="/appdata/.env"
           tmp="/appdata/.env.tmp"
-          printf "JWT_SECRET=%s\n" "${JWT_SECRET}" > "$tmp"
+          if [ -f "$envfile" ]; then
+            grep -v '^JWT_SECRET=' "$envfile" > "$tmp" || true
+          else
+            : > "$tmp"
+          fi
+          printf "JWT_SECRET=%s\n" "${JWT_SECRET}" >> "$tmp"
           chmod 600 "$tmp" || true
           chown 1000:1000 "$tmp" || true
-          mv "$tmp" /appdata/.env
+          mv "$tmp" "$envfile"
         fi
 
         mkdir -p /data/node /data/pool/config /data/pool/www/pool /data/pool/www/users /data/templates
@@ -128,7 +134,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/www:/www
 
   app:
-    image: ghcr.io/willitmod/axebch-app-umbrel-test:0.7.55-beta
+    image: ghcr.io/willitmod/axebch-app-umbrel-test:0.7.56-beta
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
