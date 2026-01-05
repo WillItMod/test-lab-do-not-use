@@ -137,7 +137,25 @@ services:
           fi
 
           # Ensure testnet section exists so switching to testnet doesn't end up with 0 peers.
-          if ! grep -q '^\\[test\\][[:space:]]*$' /data/node/digibyte.conf; then
+          conf="/data/node/digibyte.conf"
+
+          # Deduplicate accidental repeated [test] blocks from older versions.
+          # (DigiByte logs each config arg occurrence, so duplicates look like "reindexing" noise on startup.)
+          if [ -f "$$conf" ] && grep -q '^[[]test[]]' "$$conf"; then
+            awk '
+              BEGIN{seen_test=0; drop=0}
+              /^[[][^]]+[]][[:space:]]*$/{
+                if ($0=="[test]") {
+                  if (seen_test==0) { seen_test=1; drop=0; print; next }
+                  drop=1; next
+                }
+                drop=0; print; next
+              }
+              { if (drop==0) print }
+            ' "$$conf" > "$$conf.tmp" && mv "$$conf.tmp" "$$conf"
+          fi
+
+          if [ -f "$$conf" ] && ! grep -q '^[[]test[]]' "$$conf"; then
             echo "[axedgb] Adding [test] section defaults to digibyte.conf"
             {
               printf "\n"
@@ -150,7 +168,7 @@ services:
               printf "addnode=testnet-seed.digibyte.org:12026\n"
               printf "addnode=95.179.160.53:12026\n"
               printf "addnode=51.15.113.125:12026\n"
-            } >> /data/node/digibyte.conf
+            } >> "$$conf"
           fi
         fi
 
@@ -463,7 +481,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/config/coins.json:/app/coins.json:ro
 
   app:
-    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.70
+    image: ghcr.io/willitmod/axedgb-app-umbrel-test:0.8.71
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
