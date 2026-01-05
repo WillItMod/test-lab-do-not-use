@@ -193,7 +193,7 @@ services:
                           (.varDiff.targetTime = 7)
                           | (.varDiff.retargetTime = 15)
                           | (.varDiff.variancePercent = 20)
-                        else . end) else . end))
+                        else . end)) else . end))
                       else . end)
                     | (.daemons = ((.daemons // []) | (if type=="array" then map(if type=="object" then (.port=$rpcport) else . end) else . end)))
                   else . end
