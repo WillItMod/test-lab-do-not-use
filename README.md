@@ -5,6 +5,7 @@ Development/test Umbrel app store for WillItMod apps.
 ## Apps
 
 - **Bitcoin Cash** (`willitmod-dev-bch`): BCH full node (BCHN) + solo Stratum v1 pool (ckpool) in a single app.
+- **Bitcoin** (`willitmod-dev-btc`): Bitcoin Core full node + solo Stratum v1 pool (ckpool) in a single app.
 - **DigiByte** (`willitmod-dev-dgb`): DigiByte Core full node + solo Stratum v1 pool (ckpool) in a single app (experimental).
 
 ## Quick setup (solo mining)
@@ -12,6 +13,7 @@ Development/test Umbrel app store for WillItMod apps.
 1. Install the app and let the node sync.
 2. Point miners at:
    - BCH: `stratum+tcp://<umbrel-ip>:4567`
+   - BTC: `stratum+tcp://<umbrel-ip>:6789`
    - DGB: `stratum+tcp://<umbrel-ip>:5678`
 
 ## Address format notes
@@ -23,6 +25,9 @@ For maximum compatibility with ckpool/miners, use a legacy BCH Base58 address (`
 
 **DGB**
 Use a DigiByte address (typically Base58 `D...` / `S...` or Bech32 `dgb1...`).
+
+**BTC**
+Use a Bitcoin address (bech32 `bc1...` or legacy `1...` / `3...`).
 
 ## Security / provenance
 

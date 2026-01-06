@@ -1,0 +1,13 @@
+services:
+  app_proxy:
+    image: getumbrel/app-proxy:1.0.0
+    ports:
+      - "21214:4000"
+    environment:
+      UMBREL_AUTH_SECRET: DEADBEEF
+      MANAGER_IP: 10.21.21.4
+      MANAGER_PORT: 3006
+    volumes:
+      - ${APP_DATA_DIR}/umbrel-app.yml:/extra/umbrel-app.yml:ro
+      - /home/umbrel/umbrel/tor/data:/var/lib/tor:ro
+      - ${APP_DATA_DIR}:/data:ro
