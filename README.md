@@ -4,8 +4,8 @@ Development/test Umbrel app store for WillItMod apps.
 
 ## Apps
 
-- **AxeBench** (`willitmod-dev-axebench`): dashboard and support tooling.
-- **Bitcoin** (`willitmod-dev-btc` / AxeBTC): Bitcoin Core full node + solo Stratum v1 pool (ckpool) in a single app.
+- **AxeBench** (`willitmod-test-lab-axebench`): dashboard and support tooling.
+- **Bitcoin** (`willitmod-test-lab-btc` / AxeBTC): Bitcoin Core full node + solo Stratum v1 pool (ckpool) in a single app.
 
 ## Quick setup (solo mining)
 

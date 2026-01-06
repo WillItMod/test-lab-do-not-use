@@ -14,7 +14,7 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
       - ${APP_DATA_DIR}:/appdata
-      - ./data/templates:/data/templates:ro
+      - ${APP_DATA_DIR}/data/templates:/data/templates:ro
     environment:
       APPS_SUBNET: "${NETWORK_IP}/16"
       RPC_USER: "btc"
@@ -82,7 +82,7 @@ services:
         condition: service_completed_successfully
     volumes:
       - ${APP_DATA_DIR}/data/node:/data
-      - ./data/templates/bitcoind-entrypoint.sh:/bitcoind-entrypoint.sh:ro
+      - ${APP_DATA_DIR}/data/templates/bitcoind-entrypoint.sh:/bitcoind-entrypoint.sh:ro
     entrypoint: ["/bin/sh", "/bitcoind-entrypoint.sh"]
     healthcheck:
       test: ["CMD-SHELL", "bitcoin-cli -datadir=/data getblockchaininfo >/dev/null 2>&1"]

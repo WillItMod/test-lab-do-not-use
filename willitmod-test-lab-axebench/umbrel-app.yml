@@ -1,5 +1,5 @@
 manifestVersion: 1
-id: willitmod-dev-axebench
+id: willitmod-test-lab-axebench
 category: bitcoin
 name: AxeBench (Dev)
 version: "3.0.2-dev.1"

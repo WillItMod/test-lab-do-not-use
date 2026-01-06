@@ -1,5 +1,5 @@
 manifestVersion: 1
-id: willitmod-dev-btc
+id: willitmod-test-lab-btc
 category: bitcoin
 name: AxeBTC
 version: "0.7.2"
