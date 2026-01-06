@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-test-lab-btc
 category: bitcoin
 name: AxeBTC
-version: "0.7.2"
+version: "0.7.3"
 tagline: BTC node + solo pool
 description: >-
   Run a Bitcoin (BTC) full node (Bitcoin Core) and a solo Stratum v1 pool (ckpool) as a single Umbrel app installation.
