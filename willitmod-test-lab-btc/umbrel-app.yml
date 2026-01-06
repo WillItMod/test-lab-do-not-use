@@ -23,13 +23,13 @@ repo: https://github.com/WillItMod/test-lab-do-not-use
 support: https://github.com/WillItMod/test-lab-do-not-use/issues
 dependencies: []
 port: 21214
-icon: "icon.png"
+icon: "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-btc/icon.png"
 gallery:
-  - "icon.png"
-  - "images/1.png"
-  - "images/2.png"
-  - "images/3.png"
-  - "images/4.png"
+  - "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-btc/icon.png"
+  - "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-btc/images/1.png"
+  - "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-btc/images/2.png"
+  - "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-btc/images/3.png"
+  - "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-btc/images/4.png"
 path: ""
 defaultUsername: ""
 defaultPassword: ""
