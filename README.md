@@ -1,4 +1,4 @@
-# WillItMod Test Umbrel Community Store
+# WillItMod Test Lab Umbrel Store
 
 Development/test Umbrel app store for WillItMod apps.
 
