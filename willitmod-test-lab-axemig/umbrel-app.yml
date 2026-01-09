@@ -1,0 +1,37 @@
+manifestVersion: 1
+id: willitmod-test-lab-axemig
+category: bitcoin
+name: AxeMIG
+version: "0.1.0"
+tagline: EXPERIMENTAL - PRE ALPHA - USE WITH CAUTION
+icon: "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-axemig/icon.png"
+description: >-
+  EXPERIMENTAL - PRE ALPHA - USE WITH CAUTION.
+
+
+  AxeMIG is a migration utility for moving blockchain data between Bitcoin-related apps on Umbrel,
+  including the Axe family (AxeBTCF / AxeBCH / AxeDGB).
+
+
+  Planned workflows:
+    - Move or copy chain data into Axe apps (space-aware where possible).
+    - Export/import via USB drive.
+    - Advanced: SSH transfer (rsync-style).
+
+
+  This app may stop/start supported Umbrel apps as part of migration.
+developer: WillItMod
+website: https://github.com/WillItMod/AxeMIG-Release
+repo: https://github.com/WillItMod/test-lab-do-not-use
+support: https://github.com/WillItMod/test-lab-do-not-use/issues
+dependencies: []
+port: 12150
+gallery:
+  - "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-axemig/icon.png"
+path: ""
+defaultUsername: ""
+defaultPassword: ""
+releaseNotes: >-
+  EXPERIMENTAL - PRE ALPHA - USE WITH CAUTION.
+submitter: WillItMod
+
