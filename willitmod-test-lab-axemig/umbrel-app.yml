@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-test-lab-axemig
 category: bitcoin
 name: AxeMIG
-version: "0.1.0"
+version: "0.1.1"
 tagline: EXPERIMENTAL - PRE ALPHA - USE WITH CAUTION
 icon: "https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-axemig/icon.png"
 description: >-
@@ -34,4 +34,3 @@ defaultPassword: ""
 releaseNotes: >-
   EXPERIMENTAL - PRE ALPHA - USE WITH CAUTION.
 submitter: WillItMod
-
