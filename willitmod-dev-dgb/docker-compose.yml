@@ -88,18 +88,6 @@ services:
           rm -rf /data/templates/init-entrypoint.sh || true
         fi
 
-        # Write a simple boot repair report for visibility.
-        ts="$$(( $$(date +%s) ))"
-        mkdir -p /data/ui/state
-        cat > /data/ui/state/boot_repair.json <<'EOF' || true
-{
-  "ts": "__TS__",
-  "initCompleted": true,
-  "note": "init ran boot repair checks"
-}
-EOF
-        sed -i "s/__TS__/$$ts/" /data/ui/state/boot_repair.json || true
-
         if [ ! -f /data/node/digibyte.conf ]; then
           envsubst < /data/templates/digibyte.conf.template > /data/node/digibyte.conf
           chown -R 1000:1000 /data/node
@@ -468,7 +456,7 @@ EOF
             --arg desired "$$desired_addr" \
             --arg addr "$$applied_addr" \
             --arg locked "$$stratum_locked" \
-            '{t:$ts,miningcoreRepaired:($repaired=="1"),settingsApplied:($applied=="1"),desiredPayout:$desired,appliedPayout:$addr,stratumLocked:($locked=="1")}' \
+            '{t:$$ts,miningcoreRepaired:($$repaired=="1"),settingsApplied:($$applied=="1"),desiredPayout:$$desired,appliedPayout:$$addr,stratumLocked:($$locked=="1")}' \
             > "$$boot_repair" 2>/dev/null || true
           chown 1000:1000 "$$boot_repair" 2>/dev/null || true
         fi
@@ -656,7 +644,7 @@ EOF
       - ${APP_DATA_DIR}/data/pool/config/coins.json:/app/coins.json:ro
 
   app:
-    image: ghcr.io/willitmod/axedgb-app:0.9.5-test
+    image: ghcr.io/willitmod/axedgb-app:0.9.6-test
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
