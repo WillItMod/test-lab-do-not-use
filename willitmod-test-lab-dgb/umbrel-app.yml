@@ -1,5 +1,5 @@
 manifestVersion: 1
-id: willitmod-dev-dgb
+id: willitmod-test-lab-dgb
 category: altcoin
 name: AxeDGB
 version: "0.9.6-test"
@@ -50,12 +50,12 @@ repo: https://github.com/WillItMod/test-lab-do-not-use
 support: https://github.com/WillItMod/test-lab-do-not-use/issues
 dependencies: []
 port: 21213
-icon: https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-dev-dgb/icon.png
+icon: https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-dgb/icon.png
 gallery:
-  - https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-dev-dgb/icon.png
-  - https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-dev-dgb/images/1.png
-  - https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-dev-dgb/images/2.png
-  - https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-dev-dgb/images/3.png
+  - https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-dgb/icon.png
+  - https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-dgb/images/1.png
+  - https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-dgb/images/2.png
+  - https://raw.githubusercontent.com/WillItMod/test-lab-do-not-use/main/willitmod-test-lab-dgb/images/3.png
 path: ""
 defaultUsername: ""
 defaultPassword: ""
